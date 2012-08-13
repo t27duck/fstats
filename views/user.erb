@@ -1,0 +1,35 @@
+<div id="total-by-user-by-month" class="chart"></div>
+<script type="text/javascript">
+  var total_by_user_by_month;
+  $(document).ready(function(){
+    total_by_user_by_month = new Highcharts.Chart({
+      chart: {renderTo: 'total-by-user-by-month', type: 'line'},
+      title: {text: "Total Fucks Given by Month" },
+      xAxis: {
+        categories: ["<%=@report.total_by_month.map{|x| "#{x[0]}/#{x[1]}"}.join('","')%>"],
+        labels: {enabled: false},
+        title: {text: "Month/Year"}
+      },
+      yAxis: {title: "Usage", min: 0, title: {text: "Total"}},
+      series: [{name: "Fucks Given", data: [<%=@report.total_by_month(params[:id]).map{|x| x[2]}.join(",")%>]}]
+    });
+  });
+</script>
+
+<table>
+  <thead>
+    <tr>
+      <th width="200">Date</th>
+      <th>Message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%@report.fucks_by_user(params[:id]).each_with_index do |row, i|%>
+      <tr class="<%=i % 2 == 0 ? "even" : "odd"%>">
+        <td><%=Date.parse(row.date).strftime("%B %d, %Y")%></td>
+        <td><%=row.message.gsub("\n","<br />")%></td>
+      </tr>
+    <%end%>
+  </tbody>
+</table>
+

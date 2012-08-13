@@ -1,0 +1,129 @@
+<div id="metrics">
+  <table border="0">
+    <thead>
+      <tr>
+        <td colspan="2">General Metrics</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="even">
+        <td>Total Fucks Given</td>
+        <td><%=@report.total_usage%></td>
+      </tr>
+      <tr>
+        <td>The Day Most Fucks Were Given</td>
+        <td><%=Date.parse(@report.max_usage_date[0]).strftime("%m/%d/%Y")%> (<%=@report.max_usage_date[1]%>)</td>
+      </tr>
+      <tr class="even">
+        <td>Total Fucks Given so far this Month</td>
+        <td><%=@report.total_for_current_month[0]%></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="top-users">
+  <table border="0">
+    <thead>
+      <tr>
+        <td colspan="2">Top Users Who Give a Fuck</td>
+      </tr>
+    </thead>
+    <tbody>
+      <% @report.top_users.each_with_index do |u, i| %>
+        <tr class="<%=i % 2 == 0 ? "even" : "odd"%>">
+          <td><%=u[0]%></td>
+          <td><%=u[1]%></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="clearboth"></div>
+
+<div id="total-by-user" class="chart"></div>
+<script type"text/javascript">
+  var total_by_user;
+  $(document).ready(function() {
+    total_by_user = new Highcharts.Chart({
+      chart: {renderTo: 'total-by-user', plotBackgroundColor: null, plotBorderWidth: null, plotShadow: false},
+      title: {text: 'Total Fucks Given by User'},
+      tooltip: {
+        formatter: function() {
+          return '<b>'+ this.point.name +'</b>: '+ this.y +' ('+ this.percentage.toFixed(2) +'%)';
+        }
+      },    
+      series: [{
+        type: 'pie',
+        name: 'User Total',
+        data: [<%=@report.total_by_user.map{|x| "['#{x[0]}',#{x[1]}]"}.join(",")%>]
+      }]
+    });
+  });
+</script>
+
+<div id="total-by-weekday" class="chart"></div>
+<script type="text/javascript">
+  var total_by_user_by_month;
+  $(document).ready(function(){
+    total_by_user_by_month = new Highcharts.Chart({
+      chart: {renderTo: 'total-by-weekday', type: 'column'},
+      title: {text: "Total by Weekday" },
+      xAxis: {
+        categories: ["Weekday"],
+        labels: {enabled: true},
+        title: {text: ""}
+      },
+      yAxis: {title: "Usage", min: 0, title: {text: "Total"}},
+      series: [
+        <%=@report.total_by_weekday.map do |r| 
+         "{name: \"#{r[0]}\", data: [#{r[1]}]}"
+        end.join(",") %>
+      ]
+    });
+  });
+</script>
+
+<div class="clearboth"></div>
+
+<div id="total-by-month" class="chart"></div>
+<script type="text/javascript">
+  var total_by_month;
+  $(document).ready(function(){
+    total_by_month = new Highcharts.Chart({
+      chart: {renderTo: 'total-by-month', type: 'line'},
+      title: {text: "Total Fucks by Month" },
+      xAxis: {
+        categories: ["<%=@report.total_by_month.map{|x| "#{x[0]}/#{x[1]}"}.join('","')%>"],
+        labels: {enabled: false},
+        title: {text: "Month/Year"}
+      },
+      yAxis: {title: "Usage", min: 0, title: {text: "Total"}},
+      legend: {enabled: false},
+      series: [{name: "Fucks Given", data: [<%=@report.total_by_month.map{|x| x[2]}.join(",")%>]}]
+    });
+  });
+</script>
+
+<div id="total-by-user-by-month" class="chart"></div>
+<script type="text/javascript">
+  var total_by_user_by_month;
+  $(document).ready(function(){
+    total_by_user_by_month = new Highcharts.Chart({
+      chart: {renderTo: 'total-by-user-by-month', type: 'line'},
+      title: {text: "Total by User by Month" },
+      xAxis: {
+        categories: ["<%=@report.total_by_month.map{|x| "#{x[0]}/#{x[1]}"}.join('","')%>"],
+        labels: {enabled: false},
+        title: {text: "Month/Year"}
+      },
+      yAxis: {title: "Usage", min: 0, title: {text: "Total"}},
+      series: [
+        <%=@report.total_by_user_by_month.map do |r| 
+          "{name: \"#{r[0]}\", data: [#{r[1].map{|x| x[2]}.join(",")}]}"
+        end.join(",") %>
+      ]
+    });
+  });
+</script>

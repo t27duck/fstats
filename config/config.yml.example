@@ -1,0 +1,6 @@
+config:
+  room_id: 111111
+  api_token: xxxxxxxxxxxxxxxxxxxxxxxx
+  subdomain: mycompany
+  protocol: https
+  excluded_user_ids: [] # Optional array of ids

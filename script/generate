@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+require "rubygems"
+
+base = File.expand_path("../", __FILE__)
+
+load "#{base}/../lib/config.rb"
+load "#{base}/lib/campfire.rb"
+load "#{base}/lib/parser.rb"
+load "#{base}/lib/user.rb"
+
+require 'data_mapper'
+DataMapper.setup(:default, "sqlite://#{base}/../db/database.db")
+
+load "#{base}/../models/data_point.rb"
+
+DataMapper.finalize
+DataMapper.auto_upgrade!
+
+print "Clearing out current data..."
+DataPoint.destroy
+print "done\n"
+
+Fstats.load_config("#{base}/../config/config.yml")
+Parser.new.generate_data
+puts "All done! Start the Sinatra app to see the data."

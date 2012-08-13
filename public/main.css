@@ -1,0 +1,67 @@
+body {
+  background-color: #5D65D9;
+}
+
+table {
+  width: 100%;
+}
+
+table thead {
+  font-weight: bold;
+  text-align: center;
+}
+
+td {
+  padding: 8px;
+}
+
+tr.even {
+  background-color: #5D65D9;
+  color: white;
+}
+
+#footer {
+  text-align: right;
+  margin: 30px 5px 15px 0;
+  font-size: 60%;
+}
+
+#navigation {
+  text-align: right;
+}
+
+#content {
+  width: 1200px;
+  margin: 20px auto;
+  padding: 10px;
+  background-color: white;
+}
+
+.clearboth {
+  clear: both;
+}
+
+.chart {
+  margin: 20px 0;
+}
+
+#metrics, #total-by-user {
+  width: 50%;
+  float: left;
+}
+
+#top-users, #total-by-weekday {
+  width: 50%;
+  float: right;
+}
+
+#metrics .big-metric {
+  width: 250px;
+  float: left;
+  margin-right: 15px;
+  padding: 15px;
+  text-align: center;
+  background-color: #5D65D9;
+  color: white;
+}
+
