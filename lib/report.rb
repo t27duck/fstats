@@ -1,13 +1,4 @@
 class Report
-  attr_reader :data
-
-  def generate_html
-    page = Page.new(self)
-    File.open("stuff.html", 'w') do |file|
-      file.write(ERB.new(page.template).result(page.get_binding))
-    end
-  end
-
   def total_usage
     return @total_usage unless @total_usage.nil?
     @total_usage = DataPoint.count
